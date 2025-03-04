@@ -86,8 +86,8 @@ jobs:
       - name: Create tar.gz and zip archives
         run: |
           cd deccord
-          mkdir -p deccord-20.0.1-x86_64-pc-linux-gnu
-          cp src/deccordd src/deccord-cli src/deccord-tx src/qt/deccord-qt deccord-20.0.1-x86_64-pc-linux-gnu/
+          mkdir -p deccord-20.0.1-x86_64-pc-linux-gnu/bin
+          cp src/deccordd src/deccord-cli src/deccord-tx src/qt/deccord-qt deccord-20.0.1-x86_64-pc-linux-gnu/bin/
           tar -czvf deccord-20.0.1-x86_64-pc-linux-gnu.tar.gz deccord-20.0.1-x86_64-pc-linux-gnu
           zip -r deccord-20.0.1-x86_64-pc-linux-gnu.zip deccord-20.0.1-x86_64-pc-linux-gnu
 
@@ -96,8 +96,8 @@ jobs:
         with:
           name: deccord-linux-x86_64-build
           path: |
-            deccord-20.0.1-x86_64-pc-linux-gnu.tar.gz
-            deccord-20.0.1-x86_64-pc-linux-gnu.zip
+            deccord/deccord-20.0.1-x86_64-pc-linux-gnu.tar.gz
+            deccord/deccord-20.0.1-x86_64-pc-linux-gnu.zip
 
       - name: Upload Partial Build Artifacts on Failure
         if: failure()
