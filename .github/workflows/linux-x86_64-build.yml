@@ -33,6 +33,22 @@ jobs:
             libxcb-xinerama0-dev libxcb-icccm4-dev x11proto-randr-dev \
             x11proto-xinerama-dev libx11-xcb-dev
 
+      - name: Cache Depends
+        uses: actions/cache@v4
+        with:
+          path: deccord/depends
+          key: ${{ runner.os }}-depends-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-depends-
+
+      - name: Cache Berkeley DB
+        uses: actions/cache@v4
+        with:
+          path: deccord/db4
+          key: ${{ runner.os }}-db4-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-db4-
+
       - name: Install Berkeley DB
         run: |
           cd deccord
@@ -56,7 +72,11 @@ jobs:
             BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" \
             BDB_CFLAGS="-I${BDB_PREFIX}/include" \
             --disable-tests --disable-shared
-          make
+          if [ -f "src/deccordd" ]; then
+            echo "Skipping make, using cached binaries."
+          else
+            make -j$(nproc)
+          fi
 
       - name: Strip Binaries
         run: |
@@ -78,3 +98,10 @@ jobs:
           path: |
             deccord-20.0.1-x86_64-pc-linux-gnu.tar.gz
             deccord-20.0.1-x86_64-pc-linux-gnu.zip
+
+      - name: Upload Partial Build Artifacts on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: partial-build-${{ github.run_id }}
+          path: deccord/src
