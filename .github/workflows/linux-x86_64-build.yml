@@ -60,10 +60,12 @@ jobs:
 
       - name: Strip Binaries
         run: |
+          cd deccord
           strip src/deccordd src/deccord-cli src/deccord-tx src/qt/deccord-qt
 
       - name: Create tar.gz and zip archives
         run: |
+          cd deccord
           mkdir -p deccord-20.0.1-x86_64-pc-linux-gnu
           cp src/deccordd src/deccord-cli src/deccord-tx src/qt/deccord-qt deccord-20.0.1-x86_64-pc-linux-gnu/
           tar -czvf deccord-20.0.1-x86_64-pc-linux-gnu.tar.gz deccord-20.0.1-x86_64-pc-linux-gnu
